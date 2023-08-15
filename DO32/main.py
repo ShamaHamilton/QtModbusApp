@@ -64,9 +64,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def write_registers(self):
         print('\nbutton "write_registers is clicked"')
         self.parse_data()
-        self.device.write_multiple_registers(register_address=0x0000, data=self.outputs_mode)
-        self.device.write_multiple_registers(register_address=0x0002, data=self.outputs)
-        self.device.write_multiple_registers(register_address=0x0004, data=self.pwm_outputs_invertion)
+        self.device.write_multiple_registers(register_address=0x0000, data=self.outputs)
+        self.device.write_multiple_registers(register_address=0x01C0, data=self.outputs_mode)
+        self.device.write_multiple_registers(register_address=0x01C2, data=self.pwm_outputs_invertion)
         self.device.write_multiple_registers(register_address=0x0100, data=self.period)
         self.device.write_multiple_registers(register_address=0x0140, data=self.duty)
         self.device.write_multiple_registers(register_address=0x0180, data=self.npulses)
@@ -77,13 +77,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.requests_num = int(self.requests_number_edit.text())
             while self.requests_num >= 1:
                 # ******************** mode ********************
-                mode = self.device.read_multiple_registers(register_address=0x0000, number=2)
+                mode = self.device.read_multiple_registers(register_address=0x01C0, number=2)
                 print(f'mode                    {mode}')
                 # ******************** outputs ********************
-                outputs = self.device.read_multiple_registers(register_address=0x0002, number=2)
+                outputs = self.device.read_multiple_registers(register_address=0x0000, number=2)
                 print(f'outputs                 {outputs}')
                 # ******************** invertion ********************
-                invertion = self.device.read_multiple_registers(register_address=0x0004, number=2)
+                invertion = self.device.read_multiple_registers(register_address=0x01C2, number=2)
                 print(f'invertion               {invertion}')
                 # ******************** period ********************
                 period = self.device.read_multiple_registers(register_address=0x0100, number=64)
