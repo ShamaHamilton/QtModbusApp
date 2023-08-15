@@ -6,7 +6,7 @@ from PyQt6 import QtWidgets
 
 from DO32MainWindow import Ui_MainWindow
 from modbus import Modbus_RTU
-from functions import data_unpack, data_split
+from functions import data_unpack, data_unpack_2, data_split
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -68,8 +68,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.device.write_multiple_registers(register_address=0x0002, data=self.outputs)
         self.device.write_multiple_registers(register_address=0x0004, data=self.pwm_outputs_invertion)
         self.device.write_multiple_registers(register_address=0x0100, data=self.period)
-        self.device.write_multiple_registers(register_address=0x0200, data=self.duty)
-        self.device.write_multiple_registers(register_address=0x0300, data=self.npulses)
+        self.device.write_multiple_registers(register_address=0x0140, data=self.duty)
+        self.device.write_multiple_registers(register_address=0x0180, data=self.npulses)
 
     def read_registers(self):
         try:
@@ -94,7 +94,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 for i in range(self.period_layout_2.count()):
                     self.period_layout_2.itemAt(i).widget().setText(str(period_unpuck[i+16]))
                 # ******************** duty ********************
-                duty = self.device.read_multiple_registers(register_address=0x0200, number=64)
+                duty = self.device.read_multiple_registers(register_address=0x0140, number=64)
                 print(f'duty                    {len(duty), duty}')
                 duty_unpuck = data_unpack(duty)
                 for i in range(self.duty_layout_1.count()):
@@ -102,7 +102,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 for i in range(self.duty_layout_2.count()):
                     self.duty_layout_2.itemAt(i).widget().setText(str(duty_unpuck[i+16]))
                 # ******************** npulses ********************
-                npulses = self.device.read_multiple_registers(register_address=0x0300, number=64)
+                npulses = self.device.read_multiple_registers(register_address=0x0180, number=64)
                 print(f'npulses                 {len(npulses), npulses}')
                 npulses_unpuck = data_unpack(npulses)
                 for i in range(self.npulses_layout_1.count()):
